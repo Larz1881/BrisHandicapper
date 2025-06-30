@@ -4,36 +4,31 @@ Main pipeline orchestrator for the BrisHandicapper project.
 
 This script discovers the latest Brisnet data file and executes the core data
 processing sequence to parse, clean, and transform the data into usable formats.
-It is intended to be run from the project root directory.
 """
 import sys
 import logging
 from pathlib import Path
 from datetime import datetime
 
-# --- Setup Project Root and System Path ---
-# This ensures that the 'src' directory is on the Python path, allowing
-# for absolute imports from modules within 'src'.
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SRC_PATH = PROJECT_ROOT / "src"
-if str(SRC_PATH) not in sys.path:
-    sys.path.insert(0, str(SRC_PATH))
-
 # --- Module Imports ---
-# Import the specific main functions and settings from our application structure.
-# Note: These imports work because 'src' is now on the system path.
+# When installed as a package, these imports work correctly
 try:
     from config.config import settings
-    from data_processing.bris_spec_new import main as parse_bris_data
-    from data_processing.current_race_info import main as create_current_info
-    from data_processing.transform_workouts import main as transform_workouts_data
-    from data_processing.transform_past_starts import main as transform_past_starts_data
+    from bris_handicapper.data_processing.bris_spec_new import main as parse_bris_data
+    from bris_handicapper.data_processing.current_race_info import main as create_current_info
+    from bris_handicapper.data_processing.transform_workouts import main as transform_workouts_data
+    from bris_handicapper.data_processing.transform_past_starts import main as transform_past_starts_data
 except ImportError as e:
-    print(f"FATAL: Could not import necessary modules. Ensure your project structure is correct and all required modules exist. Error: {e}")
+    print(f"FATAL: Could not import necessary modules. Error: {e}")
+    print("\nPlease ensure you have:")
+    print("1. Run 'pip install -e .' from the project root directory")
+    print("2. Created all necessary __init__.py files")
+    print("3. Are running this from the correct environment")
     sys.exit(1)
 
 # --- Logging Setup ---
-# A dedicated directory for log files is created in the project root.
+# Get project root from the installed package location
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LOG_DIR = PROJECT_ROOT / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 LOG_FILE_PATH = LOG_DIR / f'pipeline_{datetime.now():%Y%m%d_%H%M%S}.log'
@@ -81,11 +76,17 @@ def run():
         # Step 0: Find the latest data file to process
         drf_to_process = find_latest_drf_file()
 
-        # The following steps are placeholders. You will uncomment them as you build each module.
-        logger.info(f"PIPELINE NOTE: The next steps are placeholders. Implement the data processing modules to make them functional.")
+        # Execute the pipeline steps
+        logger.info("Step 1: Parsing Brisnet data...")
         parse_bris_data(drf_file_path_arg=drf_to_process)
+
+        logger.info("Step 2: Creating current race info...")
         create_current_info()
+
+        logger.info("Step 3: Transforming workouts...")
         transform_workouts_data()
+
+        logger.info("Step 4: Transforming past starts...")
         transform_past_starts_data()
 
         logger.info("=============================================")

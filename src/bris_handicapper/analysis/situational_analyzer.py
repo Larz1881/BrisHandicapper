@@ -70,9 +70,10 @@ def get_situational_adjustments(contenders_df: pd.DataFrame, past_starts_df: pd.
             adjustments['upgrade'][prog_num] = f"High ROI T/J Combo ({horse['tj_combo_roi_365d']})"
     return adjustments
 
-def adjust_groups_for_situation(initial_groups: Dict[str, List[Any]], contenders_df: pd.DataFrame, past_starts_df: pd.DataFrame) -> Dict[str, List[Any]]:
+def adjust_groups_for_situation(initial_groups: Dict[str, List[Any]], contenders_df: pd.DataFrame, past_starts_df: pd.DataFrame) -> Tuple[Dict[str, List[Any]], Dict[str, Dict[Any, str]]]:
     """
     Adjusts contender groups based on pace, pedigree, and form analysis.
+    Returns both the adjusted groups and the adjustments made.
     """
     race_num = contenders_df['race_number'].iloc[0]
     logger.info(f"--- Adjusting Groups for Race {race_num} ---")
@@ -106,7 +107,7 @@ def adjust_groups_for_situation(initial_groups: Dict[str, List[Any]], contenders
 
     logger.info(f"Final Adjusted Groups: {final_groups}")
     logger.info("--- Situational Analysis Complete ---")
-    return final_groups
+    return final_groups, adjustments
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -138,8 +139,9 @@ if __name__ == '__main__':
         "Group 3": ['3', '5']
     }
 
-    final_groups = adjust_groups_for_situation(initial_groups_mock, mock_contenders_df, mock_past_starts_df)
+    final_groups, adjustments = adjust_groups_for_situation(initial_groups_mock, mock_contenders_df, mock_past_starts_df)
 
     print("\n--- TEST RESULTS ---")
     print(f"Initial Groups: {initial_groups_mock}")
     print(f"Final Adjusted Groups: {final_groups}")
+    print(f"Adjustments: {adjustments}")
