@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["bris_handicapper"]
+packages = ["bris_handicapper", "config"]
 package-dir = {"" = "src"} # This tells setuptools to look in src/ for packages
 
 [project.scripts]

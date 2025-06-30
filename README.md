@@ -86,7 +86,7 @@ The project provides two main entry points:
 
 ### Configuration
 
-Project settings, including file paths and handicapping parameters, can be configured in the `src/bris_handicapper/config/config.py` file.
+Project settings, including file paths and handicapping parameters, can be configured in the `src/config/config.py` file.
 
 ### Contributing
 
