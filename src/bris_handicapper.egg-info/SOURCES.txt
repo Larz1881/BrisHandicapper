@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/bris_handicapper/handicap.py
+src/bris_handicapper/main.py
+src/bris_handicapper.egg-info/PKG-INFO
+src/bris_handicapper.egg-info/SOURCES.txt
+src/bris_handicapper.egg-info/dependency_links.txt
+src/bris_handicapper.egg-info/entry_points.txt
+src/bris_handicapper.egg-info/requires.txt
+src/bris_handicapper.egg-info/top_level.txt

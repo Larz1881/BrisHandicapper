@@ -1,0 +1,3 @@
+[console_scripts]
+bris_handicapper_handicap = bris_handicapper.handicap:handicap_races
+bris_handicapper_main = bris_handicapper.main:run

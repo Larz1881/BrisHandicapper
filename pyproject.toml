@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bris_handicapper"
+version = "0.1.0"  # Adjust as needed
+description = "A handicapping tool for Brisnet data."
+authors = [{name = "Larry Conn", email = "your.email@example.com"}] # Update with your info
+readme = "README.md"  # Create a README.md if you don't have one
+requires-python = ">=3.9"  # Adjust to your Python version
+dependencies = [
+    "pandas>=2.0.0",
+    "pyarrow>=10.0.0",
+]
+
+[tool.setuptools]
+packages = ["bris_handicapper"]
+package-dir = {"" = "src"} # This tells setuptools to look in src/ for packages
+
+[project.scripts]
+bris_handicapper_main = "bris_handicapper.main:run"
+bris_handicapper_handicap = "bris_handicapper.handicap:handicap_races"
