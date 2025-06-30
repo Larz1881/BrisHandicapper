@@ -32,7 +32,7 @@ COLUMN_MAPPINGS = {
     "Today's_Medication": "medication_today",
     "Equipment_Change": "equipment_change_today",
     "BRIS_Run_Style_designation": "bris_run_style",
-    ""Quirin"_style_Speed_Points": "quirin_speed_points",
+    "\"Quirin\"_style_Speed_Points": "quirin_speed_points",
     "BRIS_Prime_Power_Rating": "bris_prime_power",
     "#_of_days_since_last_race": "days_since_last_race",
 

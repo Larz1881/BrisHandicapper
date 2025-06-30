@@ -14,8 +14,13 @@ from datetime import datetime
 # --- Setup Project Root and System Path ---
 # This ensures that the 'src' directory is on the Python path, allowing
 # for absolute imports from modules within 'src'.
-PROJECT_ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_PATH = PROJECT_ROOT / "src"
+# Add the local "src" directory to sys.path only when running from the
+# source tree. This keeps imports working both in development and when the
+# package is installed, where this directory does not exist.
+if SRC_PATH.exists() and str(SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(SRC_PATH))
 
 # --- Module Imports ---
 # Import the specific main functions and settings from our application structure.

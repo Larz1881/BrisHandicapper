@@ -13,10 +13,13 @@ from typing import Dict, Any, List, Optional
 import pandas as pd
 
 # --- Setup Project Root and System Path ---
-PROJECT_ROOT = Path(__file__).resolve().parent
-SRC_PATH = str(PROJECT_ROOT / "src")
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_PATH = PROJECT_ROOT / "src"
+# Only add the project "src" directory to the import path when running from
+# a source checkout. When installed as a package this directory doesn't exist
+# and the modules are already available on sys.path.
+if SRC_PATH.exists() and str(SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(SRC_PATH))
 
 # --- Module Imports ---
 try:
