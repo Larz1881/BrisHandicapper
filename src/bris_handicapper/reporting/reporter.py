@@ -12,8 +12,8 @@ from pathlib import Path
 import pandas as pd
 from typing import Dict, List, Any
 
-from src.bris_handicapper.config import settings
-from src.bris_handicapper.analysis.grouper import FACTOR_MATRIX_CONFIG
+from config.config import settings
+from bris_handicapper.analysis.grouper import FACTOR_MATRIX_CONFIG
 
 logger = logging.getLogger(__name__)
 
