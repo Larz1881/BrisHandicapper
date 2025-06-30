@@ -1,0 +1,9 @@
+2025-06-30 13:21:40,493 - bris_handicapper.main - INFO - ==============================================
+2025-06-30 13:21:40,494 - bris_handicapper.main - INFO - === Starting Brisnet Data Processing Pipeline ===
+2025-06-30 13:21:40,494 - bris_handicapper.main - INFO - ==============================================
+2025-06-30 13:21:40,494 - bris_handicapper.main - INFO - Searching for DRF files in: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\raw using pattern: '*.[dD][rR][fF]'
+2025-06-30 13:21:40,495 - bris_handicapper.main - INFO - Found latest DRF file: CDX0628.DRF
+2025-06-30 13:21:40,496 - bris_handicapper.main - INFO - PIPELINE NOTE: The next steps are placeholders. Implement the data processing modules to make them functional.
+2025-06-30 13:21:40,496 - bris_handicapper.main - INFO - =============================================
+2025-06-30 13:21:40,496 - bris_handicapper.main - INFO - === Pipeline Finished Successfully      ===
+2025-06-30 13:21:40,496 - bris_handicapper.main - INFO - =============================================

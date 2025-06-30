@@ -24,12 +24,10 @@ if str(SRC_PATH) not in sys.path:
 # Note: These imports work because 'src' is now on the system path.
 try:
     from config.config import settings
-    # The following are placeholder imports for modules that will contain
-    # the main logic for each pipeline step.
-    # from data_processing.bris_spec_new import main as parse_bris_data
-    # from data_processing.current_race_info import main as create_current_info
-    # from data_processing.transform_workouts import main as transform_workouts_data
-    # from data_processing.transform_past_starts import main as transform_past_starts_data
+    from data_processing.bris_spec_new import main as parse_bris_data
+    from data_processing.current_race_info import main as create_current_info
+    from data_processing.transform_workouts import main as transform_workouts_data
+    from data_processing.transform_past_starts import main as transform_past_starts_data
 except ImportError as e:
     print(f"FATAL: Could not import necessary modules. Ensure your project structure is correct and all required modules exist. Error: {e}")
     sys.exit(1)
@@ -85,10 +83,10 @@ def run():
 
         # The following steps are placeholders. You will uncomment them as you build each module.
         logger.info(f"PIPELINE NOTE: The next steps are placeholders. Implement the data processing modules to make them functional.")
-        # parse_bris_data(drf_file_path_arg=drf_to_process)
-        # create_current_info()
-        # transform_workouts_data()
-        # transform_past_starts_data()
+        parse_bris_data(drf_file_path_arg=drf_to_process)
+        create_current_info()
+        transform_workouts_data()
+        transform_past_starts_data()
 
         logger.info("=============================================")
         logger.info("=== Pipeline Finished Successfully      ===")

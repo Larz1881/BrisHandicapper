@@ -1,1 +1,2 @@
 bris_handicapper
+config
