@@ -12,21 +12,19 @@ from typing import Dict, Any, List, Optional
 
 import pandas as pd
 
-# --- Setup Project Root and System Path ---
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SRC_PATH = PROJECT_ROOT / "src"
-if str(SRC_PATH) not in sys.path:
-    sys.path.insert(0, str(SRC_PATH))
-
 # --- Module Imports ---
 try:
-    from config.config import settings, paths
+    from config import settings, paths
     from bris_handicapper.analysis.contender_filter import isolate_contenders
     from bris_handicapper.analysis.grouper import group_contenders
     from bris_handicapper.analysis.situational_analyzer import adjust_groups_for_situation
     from bris_handicapper.reporting.reporter import generate_llm_report_data, save_report
 except ImportError as e:
-    print(f"FATAL: Could not import necessary modules. Ensure your project structure is correct. Error: {e}")
+    print(f"FATAL: Could not import necessary modules. Error: {e}")
+    print("\nPlease ensure you have:")
+    print("1. Run 'pip install -e .' from the project root directory")
+    print("2. Created all necessary __init__.py files")
+    print("3. Are running this from the correct environment")
     sys.exit(1)
 
 # --- Basic Logging Setup for Standalone Execution ---
@@ -75,14 +73,14 @@ def handicap_races():
         initial_groups = group_contenders(contenders, past_starts_df)
 
         # Steps 4 & 5: Adjust Groups
-        final_groups = adjust_groups_for_situation(initial_groups, contenders, past_starts_df)
+        final_groups, adjustments = adjust_groups_for_situation(initial_groups, contenders, past_starts_df)
 
         # Step 6: Generate and Save Report
-        report_data = generate_llm_report_data(final_groups, contenders, past_starts_df)
+        report_data = generate_llm_report_data(final_groups, contenders, past_starts_df, adjustments)
         save_report(report_data, paths.REPORTS_DIR)
 
         logger.info(f"Finished processing {track_code} - Race {race_num}. Report saved.")
 
 if __name__ == "__main__":
-    logger.info("Executing handicapper.py as a standalone script.")
+    logger.info("Executing handicap.py as a standalone script.")
     handicap_races()

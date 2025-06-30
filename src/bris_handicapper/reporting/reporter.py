@@ -10,7 +10,7 @@ import logging
 import json
 from pathlib import Path
 import pandas as pd
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 from config.config import settings
 from bris_handicapper.analysis.grouper import FACTOR_MATRIX_CONFIG
@@ -48,11 +48,15 @@ def generate_llm_report_data(
     final_groups: Dict[str, List[Any]],
     contenders_df: pd.DataFrame,
     past_starts_df: pd.DataFrame,
-    adjustments: Dict[str, Dict[Any, str]]
+    adjustments: Optional[Dict[str, Dict[Any, str]]] = None
 ) -> Dict[str, Any]:
     """
     Generates a structured dictionary for a single race, optimized for an LLM.
     """
+    # If adjustments weren't provided, use an empty structure
+    if adjustments is None:
+        adjustments = {'upgrade': {}, 'downgrade': {}}
+
     race_info = contenders_df.iloc[0]
     track_id = race_info['track_code']
     race_num = race_info['race_number']
@@ -106,7 +110,7 @@ def save_report(report_data: Dict[str, Any], output_dir: Path):
     race_num = report_data["race_identification"]["race_number"]
     
     track_dir = output_dir / track
-    track_dir.mkdir(exist_ok=True)
+    track_dir.mkdir(exist_ok=True, parents=True)
     
     file_path = track_dir / f"race_{race_num}_report.json"
     
