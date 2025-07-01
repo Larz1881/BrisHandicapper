@@ -17,6 +17,7 @@ import numpy as np
 from pathlib import Path
 from typing import List, Final, Optional
 import logging  # Import logging
+import sys
 
 from config.settings import PARSED_RACE_DATA, CURRENT_RACE_INFO, PROCESSED_DATA_DIR
 

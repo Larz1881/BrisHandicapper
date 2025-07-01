@@ -52,14 +52,14 @@ def handicap_races():
     races_to_handicap = current_races_df[['track_code', 'race_number']].drop_duplicates().to_dict('records')
 
     for race_info in races_to_handicap:
-        track_code = race_info['track_code']
-        race_num = race_info['race_number']
+        track_code = race_info['track']
+        race_num = race_info['race']
 
         logger.info(f"\n{'='*60}\nProcessing: {track_code} - Race {race_num}\n{'='*60}")
 
         single_race_df = current_races_df[
-            (current_races_df['track_code'] == track_code) &
-            (current_races_df['race_number'] == race_num)
+            (current_races_df['track'] == track_code) &
+            (current_races_df['race'] == race_num)
         ]
 
         # --- Execute the 6-Step Handicapping Process ---

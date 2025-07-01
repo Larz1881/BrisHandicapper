@@ -1,5 +1,6 @@
 README.md
 pyproject.toml
+src/bris_handicapper/__init__.py
 src/bris_handicapper/handicap.py
 src/bris_handicapper/main.py
 src/bris_handicapper.egg-info/PKG-INFO

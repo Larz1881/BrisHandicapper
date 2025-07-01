@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Any, Final, Optional, Set
 import re  # For parsing bris_dict.txt
 import logging  # Import logging
+import sys
 
 from config.settings import (
     BRIS_SPEC_CACHE,

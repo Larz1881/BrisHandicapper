@@ -1,0 +1,60 @@
+2025-06-30 14:55:04,630 - bris_handicapper.main - INFO - ==============================================
+2025-06-30 14:55:04,630 - bris_handicapper.main - INFO - === Starting Brisnet Data Processing Pipeline ===
+2025-06-30 14:55:04,631 - bris_handicapper.main - INFO - ==============================================
+2025-06-30 14:55:04,631 - bris_handicapper.main - INFO - Searching for DRF files in: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\raw using pattern: '*.[dD][rR][fF]'
+2025-06-30 14:55:04,632 - bris_handicapper.main - INFO - Found latest DRF file: CDX0628.DRF
+2025-06-30 14:55:04,633 - bris_handicapper.main - INFO - Step 1: Parsing Brisnet data...
+2025-06-30 14:55:04,634 - bris_handicapper.data_processing.bris_spec_new - INFO - --- bris_spec_new.main() starting ---
+2025-06-30 14:55:04,634 - bris_handicapper.data_processing.bris_spec_new - INFO - Processing DRF file provided as argument: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\raw\CDX0628.DRF
+2025-06-30 14:55:04,634 - bris_handicapper.data_processing.bris_spec_new - INFO - Loading specification cache from: C:\Users\Larry\Documents\Bris\BrisHandicapper\cache\bris_spec.pkl
+2025-06-30 14:55:04,652 - bris_handicapper.data_processing.bris_spec_new - INFO - Parsing field types from: C:\Users\Larry\Documents\Bris\BrisHandicapper\cache\bris_dict.txt
+2025-06-30 14:55:04,666 - bris_handicapper.data_processing.bris_spec_new - INFO - Parsed types for 190 fields from bris_dict.txt.
+2025-06-30 14:55:04,666 - bris_handicapper.data_processing.bris_spec_new - INFO - 
+Attempting to parse CDX0628.DRF as comma-delimited...
+2025-06-30 14:55:04,667 - bris_handicapper.data_processing.bris_spec_new - INFO - Excluding columns starting with 'reserved'. Using 1321 out of 1435 columns.
+2025-06-30 14:55:04,779 - bris_handicapper.data_processing.bris_spec_new - INFO - Parsing successful. Read 110 lines from CDX0628.DRF.
+2025-06-30 14:55:04,779 - bris_handicapper.data_processing.bris_spec_new - INFO - 
+Identifying column types using parsed bris_dict.txt info...
+2025-06-30 14:55:04,827 - bris_handicapper.data_processing.bris_spec_new - INFO - Identified 123 numeric columns using spec.
+2025-06-30 14:55:04,827 - bris_handicapper.data_processing.bris_spec_new - INFO - Identified 21 date columns using spec.
+2025-06-30 14:55:04,828 - bris_handicapper.data_processing.bris_spec_new - INFO - 
+Attempting data type conversions...
+2025-06-30 14:55:04,829 - bris_handicapper.data_processing.bris_spec_new - INFO - Converting 123 columns to numeric...
+2025-06-30 14:55:04,851 - bris_handicapper.data_processing.bris_spec_new - INFO - Successfully converted 123 numeric columns.
+2025-06-30 14:55:04,851 - bris_handicapper.data_processing.bris_spec_new - INFO - Converting 21 columns to datetime...
+2025-06-30 14:55:04,868 - bris_handicapper.data_processing.bris_spec_new - INFO - Successfully converted 21 date columns.
+2025-06-30 14:55:04,883 - bris_handicapper.data_processing.bris_spec_new - INFO - 
+Saving the processed data to Parquet file: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\parsed_race_data_full.parquet
+2025-06-30 14:55:05,069 - bris_handicapper.data_processing.bris_spec_new - INFO - 
+Successfully saved final data to: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\parsed_race_data_full.parquet
+2025-06-30 14:55:05,069 - bris_handicapper.data_processing.bris_spec_new - INFO - Final DataFrame shape: (110, 1332)
+2025-06-30 14:55:05,069 - bris_handicapper.data_processing.bris_spec_new - INFO - Final DataFrame Info:
+2025-06-30 14:55:05,069 - bris_handicapper.data_processing.bris_spec_new - INFO - --- bris_spec_new.main() finished ---
+2025-06-30 14:55:05,072 - bris_handicapper.main - INFO - Step 2: Creating current race info...
+2025-06-30 14:55:08,014 - bris_handicapper.data_processing.current_race_info - INFO - --- Creating Current Race Info File (2025-06-30 14:55:07 EDT) ---
+2025-06-30 14:55:08,014 - bris_handicapper.data_processing.current_race_info - INFO - Loading wide format data from: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\parsed_race_data_full.parquet
+2025-06-30 14:55:08,495 - bris_handicapper.data_processing.current_race_info - INFO - Loaded wide data with shape: (110, 1332)
+2025-06-30 14:55:08,502 - bris_handicapper.data_processing.current_race_info - INFO - 
+Dropping 1018 wide workout/past performance columns...
+2025-06-30 14:55:08,517 - bris_handicapper.data_processing.current_race_info - INFO - DataFrame shape after dropping columns: (110, 335)
+2025-06-30 14:55:08,517 - bris_handicapper.data_processing.current_race_info - INFO - Number of columns actually dropped: 997
+2025-06-30 14:55:08,518 - bris_handicapper.data_processing.current_race_info - INFO - 
+Saving current race info data to: C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\current_race_info.parquet
+2025-06-30 14:55:08,561 - bris_handicapper.data_processing.current_race_info - INFO - Save complete.
+2025-06-30 14:55:08,561 - bris_handicapper.data_processing.current_race_info - INFO - 
+Output DataFrame Info:
+2025-06-30 14:55:08,561 - bris_handicapper.data_processing.current_race_info - INFO - 
+--- Script Finished (2025-06-30 14:55:08 EDT) ---
+2025-06-30 14:55:08,563 - bris_handicapper.main - INFO - Step 3: Transforming workouts...
+2025-06-30 14:55:08,564 - bris_handicapper.data_processing.long_format_transformer - INFO - --- Transforming workout data ---
+2025-06-30 14:55:08,702 - bris_handicapper.data_processing.long_format_transformer - INFO - Saved workout data to C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\workouts_long_format.parquet
+2025-06-30 14:55:08,704 - bris_handicapper.main - INFO - Step 4: Transforming past starts...
+2025-06-30 14:55:08,704 - bris_handicapper.data_processing.long_format_transformer - INFO - --- Transforming past performance data ---
+2025-06-30 14:55:09,578 - bris_handicapper.data_processing.long_format_transformer - INFO - Calculating Brohamer/Sartin pace figures...
+2025-06-30 14:55:09,581 - bris_handicapper.data_processing.long_format_transformer - WARNING - Required split column 'pp_split_4f_finish_secs' not found. Pace calculations involving it will result in NaN.
+2025-06-30 14:55:09,582 - bris_handicapper.data_processing.long_format_transformer - WARNING - Required split column 'pp_split_6f_finish_secs' not found. Pace calculations involving it will result in NaN.
+2025-06-30 14:55:09,598 - bris_handicapper.data_processing.long_format_transformer - INFO - Finished calculating Brohamer/Sartin pace figures.
+2025-06-30 14:55:09,881 - bris_handicapper.data_processing.long_format_transformer - INFO - Saved past performance data to C:\Users\Larry\Documents\Bris\BrisHandicapper\data\processed\past_starts_long_format.parquet
+2025-06-30 14:55:09,884 - bris_handicapper.main - INFO - =============================================
+2025-06-30 14:55:09,885 - bris_handicapper.main - INFO - === Pipeline Finished Successfully      ===
+2025-06-30 14:55:09,885 - bris_handicapper.main - INFO - =============================================
