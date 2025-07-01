@@ -14,13 +14,13 @@ logger = logging.getLogger(__name__)
 
 # --- Configuration for Grouping Analysis ---
 FACTOR_MATRIX_CONFIG = {
-    'bris_prime_power': {
-        'source_col': 'bris_prime_power',
+    'bris_prime_power_rating': {
+        'source_col': 'bris_prime_power_rating',
         'source_df': 'current',
         'higher_is_better': True
     },
-    'best_bris_speed': {
-        'source_col': 'pp_bris_speed',
+    'best_bris_speed_rating': {
+        'source_col': 'pp_bris_speed_rating',
         'source_df': 'past',
         'higher_is_better': True
     },
@@ -42,8 +42,8 @@ FACTOR_MATRIX_CONFIG = {
 }
 
 SIGNIFICANT_GAPS = {
-    'bris_prime_power': 5.0,
-    'best_bris_speed': 5.0,
+    'bris_prime_power_rating': 5.0,
+    'best_bris_speed_rating': 5.0,
     'best_2f_pace': 3.0,
     'best_4f_pace': 3.0,
     'best_late_pace': 3.0
@@ -58,22 +58,22 @@ def group_contenders(contenders_df: pd.DataFrame, past_starts_df: pd.DataFrame) 
     """
     Stratifies contenders into Groups 1, 2, and 3 based on gap analysis.
     """
-    race_num = contenders_df['race_number'].iloc[0]
+    race_num = contenders_df['race'].iloc[0]
     logger.info(f"--- Grouping Contenders for Race {race_num} ---")
 
     if contenders_df.empty or len(contenders_df) < 2:
         logger.warning("Not enough contenders to perform grouping. Assigning all to Group 1.")
-        return {"Group 1": contenders_df['program_number'].tolist(), "Group 2": [], "Group 3": []}
+        return {"Group 1": contenders_df['program_number_if_available'].tolist(), "Group 2": [], "Group 3": []}
 
-    factor_matrix = pd.DataFrame(index=contenders_df['program_number'])
+    factor_matrix = pd.DataFrame(index=contenders_df['program_number_if_available'])
 
     for factor, config in FACTOR_MATRIX_CONFIG.items():
         source_col = config['source_col']
         if config['source_df'] == 'current':
-            factor_values = contenders_df.set_index('program_number')[source_col]
+            factor_values = contenders_df.set_index('program_number_if_available')[source_col]
         else:
-            relevant_pps = past_starts_df[past_starts_df['program_number'].isin(factor_matrix.index)]
-            factor_values = relevant_pps.groupby('program_number')[source_col].max() if not relevant_pps.empty else pd.Series(dtype=float)
+            relevant_pps = past_starts_df[past_starts_df['pp_post_position'].isin(factor_matrix.index)]
+            factor_values = relevant_pps.groupby('program_number_if_available')[source_col].max() if not relevant_pps.empty else pd.Series(dtype=float)
         factor_matrix[factor] = factor_values
 
     factor_matrix['grouping_score'] = 0
@@ -94,7 +94,7 @@ def group_contenders(contenders_df: pd.DataFrame, past_starts_df: pd.DataFrame) 
     sorted_scores = factor_matrix['grouping_score'].sort_values(ascending=True)
     logger.debug(f"Factor Matrix and Scores for Race {race_num}:\n{factor_matrix.to_string()}")
 
-    favorite_prog_num = contenders_df.sort_values(by='morning_line_odds').iloc[0]['program_number']
+    favorite_prog_num = contenders_df.sort_values(by='morning_line_odds').iloc[0]['program_number_if_available']
 
     group1_candidates = set(sorted_scores.head(GROUP_1_SIZE).index)
     group1_candidates.add(favorite_prog_num)
@@ -116,18 +116,18 @@ if __name__ == '__main__':
     logger.info("Running grouper.py in standalone mode for testing.")
 
     mock_contenders_data = {
-        'track_code': ['TEST'] * 5,
-        'race_number': [5] * 5,
-        'program_number': ['1', '2', '3', '4', '5'],
+        'track': ['TEST'] * 5,
+        'race': [5] * 5,
+        'program_number_if_available': ['1', '2', '3', '4', '5'],
         'horse_name': ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo'],
         'morning_line_odds': [2.0, 3.0, 10.0, 5.0, 12.0],
-        'bris_prime_power': [145.0, 148.0, 130.0, 144.0, 125.0],
+        'bris_prime_power_rating': [145.0, 148.0, 130.0, 144.0, 125.0],
     }
     mock_contenders_df = pd.DataFrame(mock_contenders_data)
 
     mock_pp_data = {
-        'program_number': ['1', '1', '2', '2', '3', '3', '4', '4', '5', '5'],
-        'pp_bris_speed': [95, 100, 98, 99, 85, 86, 96, 97, 80, 82],
+        'pp_post_position': ['1', '1', '2', '2', '3', '3', '4', '4', '5', '5'],
+        'pp_bris_speed_rating': [95, 100, 98, 99, 85, 86, 96, 97, 80, 82],
         'pp_bris_pace_2f': [90, 92, 95, 96, 80, 81, 88, 89, 75, 76],
         'pp_bris_pace_4f': [100, 101, 98, 99, 90, 91, 95, 96, 85, 86],
         'pp_bris_late_pace': [95, 96, 96.5, 97.5, 85, 86, 91.5, 92.5, 80, 81]
@@ -137,5 +137,5 @@ if __name__ == '__main__':
     final_groups = group_contenders(mock_contenders_df, mock_pp_df)
 
     print("\n--- TEST RESULTS ---")
-    print(f"Initial Contenders: {mock_contenders_df['program_number'].tolist()}")
+    print(f"Initial Contenders: {mock_contenders_df['program_number_if_available'].tolist()}")
     print(f"Final Groups: {final_groups}")

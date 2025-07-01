@@ -49,7 +49,7 @@ def handicap_races():
         logger.error(f"FATAL: Could not load processed data file. Please run the data pipeline first. Error: {e}")
         return
 
-    races_to_handicap = current_races_df[['track_code', 'race_number']].drop_duplicates().to_dict('records')
+    races_to_handicap = current_races_df[['track', 'race']].drop_duplicates().to_dict('records')
 
     for race_info in races_to_handicap:
         track_code = race_info['track']

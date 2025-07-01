@@ -24,11 +24,11 @@ def build_factor_matrix_for_report(
     Builds a data-rich dictionary of the key performance factors for top contenders.
     """
     report_matrix = {}
-    program_numbers = contenders_df['program_number'].tolist()
+    program_number_if_availables = contenders_df['program_number_if_available'].tolist()
     
-    for prog_num in program_numbers:
-        horse_data = contenders_df[contenders_df['program_number'] == prog_num].iloc[0]
-        horse_pps = past_starts_df[past_starts_df['program_number'] == prog_num]
+    for prog_num in program_number_if_availables:
+        horse_data = contenders_df[contenders_df['program_number_if_available'] == prog_num].iloc[0]
+        horse_pps = past_starts_df[past_starts_df['program_number_if_available'] == prog_num]
         
         horse_report = {}
         for factor, config in FACTOR_MATRIX_CONFIG.items():
@@ -58,11 +58,11 @@ def generate_llm_report_data(
         adjustments = {'upgrade': {}, 'downgrade': {}}
 
     race_info = contenders_df.iloc[0]
-    track_id = race_info['track_code']
-    race_num = race_info['race_number']
+    track_id = race_info['track']
+    race_num = race_info['race']
     
     favorite = contenders_df.sort_values(by='morning_line_odds').iloc[0]
-    favorite_prog_num = favorite['program_number']
+    favorite_prog_num = favorite['program_number_if_available']
     
     if favorite_prog_num in final_groups.get("Group 1", []):
         favorite_status = "Legitimate"
@@ -78,14 +78,14 @@ def generate_llm_report_data(
     report = {
         "race_identification": {
             "track": track_id,
-            "race_number": int(race_num),
+            "race": int(race_num),
             "distance_furlongs": round(race_info.get('distance_yards', 0) / 220, 2),
             "surface": race_info.get('surface'),
             "race_type": race_info.get('race_type')
         },
         "handicapping_summary": {
             "favorite_details": {
-                "program_number": favorite_prog_num,
+                "program_number_if_available": favorite_prog_num,
                 "name": favorite['horse_name'],
                 "classification": favorite_status
             },
@@ -107,7 +107,7 @@ def generate_llm_report_data(
 def save_report(report_data: Dict[str, Any], output_dir: Path):
     """Saves the report data as a JSON file."""
     track = report_data["race_identification"]["track"]
-    race_num = report_data["race_identification"]["race_number"]
+    race_num = report_data["race_identification"]["race"]
     
     track_dir = output_dir / track
     track_dir.mkdir(exist_ok=True, parents=True)
@@ -126,9 +126,9 @@ if __name__ == '__main__':
     logger.info("Running reporter.py in standalone mode for testing.")
 
     mock_contenders_data = {
-        'track_code': ['TEST'] * 4,
-        'race_number': [5] * 4,
-        'program_number': ['1', '2', '7', '8'],
+        'track': ['TEST'] * 4,
+        'race': [5] * 4,
+        'program_number_if_available': ['1', '2', '7', '8'],
         'horse_name': ['Alpha', 'Bravo', 'Charlie', 'Delta'],
         'morning_line_odds': [2.0, 3.0, 5.0, 8.0],
         'distance_yards': [1760, 1760, 1760, 1760],
@@ -139,8 +139,8 @@ if __name__ == '__main__':
     mock_contenders_df = pd.DataFrame(mock_contenders_data)
 
     mock_pp_data = {
-        'program_number': ['1', '2', '7', '8'],
-        'pp_bris_speed': [100, 99, 97, 86],
+        'program_number_if_available': ['1', '2', '7', '8'],
+        'pp_bris_speed_rating': [100, 99, 97, 86],
         'pp_bris_pace_2f': [92, 96, 88, 81],
         'pp_bris_pace_4f': [101, 99, 96, 90],
         'pp_bris_late_pace': [96, 97.5, 92.5, 85]
